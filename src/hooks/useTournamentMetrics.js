@@ -16,13 +16,14 @@ export const useTournamentMetrics = (format) => {
   const [rawData, setRawData] = useState([]); 
   //loading: Tracks if loading is in progress
   const [loading, setLoading] = useState(true);
-
   /**
    * This effect runs every time the format changes.
    */
   useEffect(() => {
     const fetchAndAggregate = async () => {
       setLoading(true);
+      setMetrics({}); 
+      setRawData([]);
       try {
         //Calculate a 120-day window
         const now = Math.floor(Date.now() / 1000);
@@ -52,8 +53,10 @@ export const useTournamentMetrics = (format) => {
                 if (typeof section === 'object') {
                   //Iterate through every card in the section
                   Object.entries(section).forEach(([cardName, info]) => {
+                    if (cardName) {
                     //Update the running total for this card name
                     counts[cardName] = (counts[cardName] || 0) + (info.count || 0);
+                    }
                   });
                 }
               });

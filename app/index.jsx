@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useContext } from 'react';
+import React, { useState, useMemo, useContext, useRef, useEffect} from 'react';
 import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FlashList } from "@shopify/flash-list";
@@ -15,6 +15,7 @@ import CardItem from '../src/components/CardItems';
  * Combines the data from both sources.
  */
 export default function Gallery() {
+  const listRef = useRef(null);
   const router = useRouter(); 
   
   //Pulls the card list and data-ready status from the Context
@@ -43,7 +44,7 @@ export default function Gallery() {
     const filtered = applyFilters(allCards, filters, format);
 
     //SORTING: Organizes the filtered cards based on their tournament play rates
-    return filtered.sort((a, b) => {
+    return [...filtered].sort((a, b) => {
       const countA = metrics[a.name] || 0;
       const countB = metrics[b.name] || 0;
 
@@ -58,6 +59,12 @@ export default function Gallery() {
       }
     });
   }, [allCards, isDataReady, metrics, filters, format, sortMode]);
+
+  useEffect(() => {
+    if (listRef.current && displayedCards.length > 0) {
+      listRef.current.scrollToIndex({ index: 0, animated: false });
+    }
+  }, [format, filters, sortMode]);
 
   //Shows screen spinner if data is loading and there are no cards to show
   if (loading && displayedCards.length === 0) {
@@ -84,13 +91,14 @@ export default function Gallery() {
           FLASH LIST:'recycles' views to handle 30,000 items with minimal memory usage.
       */}
       <FlashList
+        ref={listRef}
         data={displayedCards}
         renderItem={({ item }) => (
           //Pressable makes each card row interactive
           <Pressable 
             onPress={() => router.push({
               pathname: "/cardDetailScreen",
-              params: { cardName: item.name } //Pass card name to the detail screen
+              params: { cardName: item.name, format: format } //Pass card name and format to the detail screen
             })}
             //Slightly transparent when pressed
             style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}

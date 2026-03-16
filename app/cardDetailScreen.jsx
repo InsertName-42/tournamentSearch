@@ -11,7 +11,7 @@ import { useTournamentMetrics } from '../src/hooks/useTournamentMetrics';
  */
 export default function CardDetail() {
   //useLocalSearchParams pulls the 'cardName' variable passed from the Gallery screen URL
-  const { cardName } = useLocalSearchParams(); 
+  const { cardName, format } = useLocalSearchParams(); 
   
   //Access the cards, loaded in our CardProvider
   const { allCards } = useContext(CardContext);
@@ -33,7 +33,7 @@ export default function CardDetail() {
    * 2. TOURNAMENT DATA
    * Get 'metrics' (total counts) and 'rawData' (the actual tournament lists).
    */
-  const { rawData, metrics } = useTournamentMetrics('Modern'); 
+  const { rawData, metrics } = useTournamentMetrics(format || 'Modern'); 
 
   /**
    * 3. DECK AGGREGATION
