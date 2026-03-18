@@ -1,3 +1,6 @@
+/**
+ * Written by Theo Justman 3/13/26 
+ */
 import React from 'react';
 import { View, Text, Pressable, StyleSheet, ScrollView } from 'react-native';
 

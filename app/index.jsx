@@ -1,58 +1,51 @@
-import React, { useState, useMemo, useContext, useRef, useEffect} from 'react';
+/**
+ * Written by Theo Justman 3/13/26 
+ * Search through Magic: the Gathering cards based on their tournament play rates.
+ */
+import React, { useState, useMemo, useContext } from 'react';
 import { View, StyleSheet, Pressable, ActivityIndicator } from 'react-native';
 import { useRouter } from 'expo-router';
 import { FlashList } from "@shopify/flash-list";
-import { CardContext } from '../src/context/CardContext';
-import { useTournamentMetrics } from '../src/hooks/useTournamentMetrics';
-import { applyFilters } from '../src/utils/filterLogic';
 
-//Prebuilt Components
-import FilterBar from '../src/components/FilterBar';
-import CardItem from '../src/components/CardItems';
+// Data & Logic Imports
+import { CardContext } from './context/CardContext';
+import { useTournamentMetrics } from './hooks/useTournamentMetrics';
+import { applyFilters } from './utils/filterLogic';
 
-/**
- * This is the main landing page that displays the searchable card database.
- * Combines the data from both sources.
- */
+// Component Imports
+import FilterBar from './components/FilterBar';
+import CardItem from './components/CardItems';
+
 export default function Gallery() {
-  const listRef = useRef(null);
   const router = useRouter(); 
   
-  //Pulls the card list and data-ready status from the Context
+  // Access the 30,000 cards from your Global Context
   const { allCards, isDataReady } = useContext(CardContext);
   
-  /**
-   * STATE MANAGEMENT
-   * Tracks the currently selected display settings
-   */
+  // State for Filters
   const [format, setFormat] = useState('Modern');
-  const [sortMode, setSortMode] = useState('MVP');
+  const [sortMode, setSortMode] = useState('MVP'); // 'MVP' or 'Underplayed'
   const [filters, setFilters] = useState({ colors: [], type: '' });
 
-  //Fetches play-counts (metrics) whenever the format changes
+  // Get tournament data for the current format
   const { metrics, loading } = useTournamentMetrics(format);
 
-  /**
-   * Data Implimentation-
-   * useMemo ensures we only re-filter and re-sort when a filter or sort changes
-   */
+  // The Filter/Sort Pipeline
   const displayedCards = useMemo(() => {
-    //If the 15MB JSON isn't loaded yet, show nothing
     if (!isDataReady || !allCards) return [];
 
-    //FILTERING: Reduces 30,000 cards down to a smaller set based on color/type
+    // 1. Narrow down cards (Color, Legality, Type)
     const filtered = applyFilters(allCards, filters, format);
 
-    //SORTING: Organizes the filtered cards based on their tournament play rates
-    return [...filtered].sort((a, b) => {
+    // 2. Sort the smaller result set using tournament metrics
+    return filtered.sort((a, b) => {
       const countA = metrics[a.name] || 0;
       const countB = metrics[b.name] || 0;
 
       if (sortMode === 'MVP') {
-        //Sorts from highest play count to lowest
         return countB - countA;
       } else {
-        //'Underplayed': sort ascending with 1
+        // Underplayed logic
         if (countA === 0) return 1;
         if (countB === 0) return -1;
         return countA - countB;
@@ -60,13 +53,6 @@ export default function Gallery() {
     });
   }, [allCards, isDataReady, metrics, filters, format, sortMode]);
 
-  useEffect(() => {
-    if (listRef.current && displayedCards.length > 0) {
-      listRef.current.scrollToIndex({ index: 0, animated: false });
-    }
-  }, [format, filters, sortMode]);
-
-  //Shows screen spinner if data is loading and there are no cards to show
   if (loading && displayedCards.length === 0) {
     return (
       <View style={styles.loader}>
@@ -77,7 +63,6 @@ export default function Gallery() {
 
   return (
     <View style={styles.container}>
-      {/* Search and Filter UI: Pass state and setter functions as props */}
       <FilterBar 
         format={format} 
         setFormat={setFormat} 
@@ -87,20 +72,14 @@ export default function Gallery() {
         setSortMode={setSortMode}
       />
       
-      {/*
-          FLASH LIST:'recycles' views to handle 30,000 items with minimal memory usage.
-      */}
       <FlashList
-        ref={listRef}
         data={displayedCards}
         renderItem={({ item }) => (
-          //Pressable makes each card row interactive
           <Pressable 
             onPress={() => router.push({
-              pathname: "/cardDetailScreen",
-              params: { cardName: item.name, format: format } //Pass card name and format to the detail screen
+              pathname: "/cardDetail",
+              params: { cardName: item.name }
             })}
-            //Slightly transparent when pressed
             style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
           >
             <CardItem 
@@ -109,7 +88,6 @@ export default function Gallery() {
             />
           </Pressable>
         )}
-        //Calculate scrollbar height before rendering
         estimatedItemSize={80}
         keyExtractor={(item) => item.id || item.name}
       />

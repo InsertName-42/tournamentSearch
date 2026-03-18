@@ -1,3 +1,6 @@
+/**
+ * Written by Theo Justman 3/13/26 
+ */
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, StyleSheet, ActivityIndicator } from 'react-native';
 import { useLocalSearchParams } from 'expo-router';

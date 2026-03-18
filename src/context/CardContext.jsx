@@ -1,3 +1,6 @@
+/**
+ * Written by Theo Justman 3/13/26 
+ */
 import React, { createContext, useState, useEffect } from 'react';
 //Import the JSON file generated fetchCards
 import rawCardData from '../../assets/mtg-cards.json';

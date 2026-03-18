@@ -1,3 +1,6 @@
+/**
+ * Written by Theo Justman 3/13/26 
+ */
 import { Stack, useRouter } from 'expo-router';
 import { Pressable, Text, StyleSheet } from 'react-native';
 //This Context Provider allows every screen to access the card database

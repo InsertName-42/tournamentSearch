@@ -1,3 +1,6 @@
+/**
+ * Written by Theo Justman 3/13/26 
+ */
 import React, { useEffect, useState, useCallback } from "react";
 import { ActivityIndicator, Linking, Pressable, ScrollView, StyleSheet, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";

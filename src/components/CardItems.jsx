@@ -1,4 +1,7 @@
-import React from 'react';
+
+/**
+ * Written by Theo Justman 3/13/26 
+ */import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Image } from 'expo-image'; // High-performance alternative to standard React Native Image
 
