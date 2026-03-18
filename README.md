@@ -1,50 +1,23 @@
-# Welcome to your Expo app 👋
+App to assist in building decks for the cardgame Magic: the Gathering through use of tournament data. Many apps exist that allow searching cards or viewing decks by archetype, but none that incorporate tournament data into the filtering. Seeing cards or decks that are tried and true rather than just all 30,000 cards assist greatly in deckbuilding, or perhaps you want cards with very low play rates to find cards with potential but that are not fully explored.
+Access a list of cards, individual cards with a list of decks, a deck with its list of cards included, or a random deck.
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+Project Demo:
+https://www.youtube.com/watch?v=GuJ3GgFXWY0
 
-## Get started
+Project Walkthrough:
+https://youtu.be/NIe87eb3nt0
 
-1. Install dependencies
+Resources used in development:
+https://shopify.github.io/flash-list/docs/usage/
+https://github.com/expo/examples
+https://github.com/hassaanjamil/rn-expo-posts-app
+https://react.dev/learn/managing-state#scaling-up-with-reducer-and-context 
+https://docs.expo.dev/
 
-   ```bash
-   npm install
-   ```
+Apps referenced:
+ManaBox
+TopDecked
 
-2. Start the app
-
-   ```bash
-   npx expo start
-   ```
-
-In the output, you'll find options to open the app in a
-
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
-
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
-```
-
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
-
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+APIs used:
+TopDeck
+Scryfall
