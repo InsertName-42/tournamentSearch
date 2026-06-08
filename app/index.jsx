@@ -8,13 +8,13 @@ import { useRouter } from 'expo-router';
 import { FlashList } from "@shopify/flash-list";
 
 // Data & Logic Imports
-import { CardContext } from './context/CardContext';
-import { useTournamentMetrics } from './hooks/useTournamentMetrics';
-import { applyFilters } from './utils/filterLogic';
+import { CardContext } from '../src/context/CardContext';
+import { useTournamentMetrics } from '../src/hooks/useTournamentMetrics';
+import { applyFilters } from '../src/utils/filterLogic';
 
 // Component Imports
-import FilterBar from './components/FilterBar';
-import CardItem from './components/CardItems';
+import FilterBar from '../src/components/FilterBar';
+import CardItem from '../src/components/CardItems';
 
 export default function Gallery() {
   const router = useRouter(); 

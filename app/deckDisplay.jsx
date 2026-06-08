@@ -72,7 +72,7 @@ export default function DeckDisplay() {
       {/* Header */}
       <View style={styles.header}>
         <Text style={styles.title}>Deck Explorer</Text>
-        <Text style={styles.subtitle}>Viewing "Meta" List</Text>
+        <Text style={styles.subtitle}>Viewing Meta List</Text>
       </View>
       
       {/* Card container that holds the formatted list */}
