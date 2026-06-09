@@ -1,45 +1,96 @@
 /**
- * Written by Theo Justman 3/13/26 
+ * src/context/CardContext.jsx
+ * Advanced Tokenized Search Engine for Datamine
  */
-import React, { createContext, useState, useEffect } from 'react';
-//Import the JSON file generated fetchCards
-import rawCardData from '../../assets/mtg-cards.json';
+import React, { createContext, useState, useContext } from 'react';
+import { Client, Databases, Query } from 'react-native-appwrite';
 
-/**
- * CardContext
- * Creates the Context object that components will use to "tune in" to card data 
- */
-export const CardContext = createContext();
+const CardContext = createContext();
 
-/**
- * CardProvider Component
- * Wrapper that sits at the very top of the app (in _layout.jsx).
- */
+const client = new Client()
+    .setEndpoint(process.env.EXPO_PUBLIC_APPWRITE_ENDPOINT)
+    .setProject(process.env.EXPO_PUBLIC_APPWRITE_PROJECT_ID);
+
+const databases = new Databases(client);
+
 export const CardProvider = ({ children }) => {
-  //allCards: The array holding the slimmed-down card objects
-  const [allCards, setAllCards] = useState([]);
-  
-  //isDataReady: A flag used to tell the app when the JSON is fully loaded 
-  const [isDataReady, setIsDataReady] = useState(false);
+    const [cards, setCards] = useState([]);
+    const [searchLoading, setSearchLoading] = useState(false);
+    const [searchError, setSearchError] = useState(null);
 
-  /**
-   * useEffect with an empty array means data is only loaded when the app first launches.
-   */
-  useEffect(() => {
-    setAllCards(rawCardData);
-    
-    //Signal to the rest of the app that it is now safe to start accessing card data
-    setIsDataReady(true);
-  }, []);
+    const DATABASE_ID = process.env.EXPO_PUBLIC_APPWRITE_DATABASE_ID;
+    const COLLECTION_ID = process.env.EXPO_PUBLIC_APPWRITE_CARDS_COLLECTION_ID;
 
-  return (
-    /**
-     * CardContext.Provider
-     * The data we share globally.
-     * {children} represents all the screens (from _layout.jsx).
-     */
-    <CardContext.Provider value={{ allCards, isDataReady }}>
-      {children}
-    </CardContext.Provider>
-  );
+    const queryCardsFromDatabase = async (searchText, formatFilter = 'Modern') => {
+        setSearchLoading(true);
+        setSearchError(null);
+
+        try {
+            const queries = [];
+
+            //Format Eligibility Filter
+            if (formatFilter) {
+                const formatKey = `legalities_${formatFilter.toLowerCase()}`;
+                queries.push(Query.equal(formatKey, 'legal'));
+            }
+
+            //Syntax Parser Logic
+            if (searchText && searchText.trim().length > 0) {
+                let remainingText = searchText;
+                const oracleMatches = [];
+
+                //Extract the contents inside o:"..." blocks
+                const oracleRegex = /o:"([^"]+)"/gi;
+                let match;
+
+                while ((match = oracleRegex.exec(searchText)) !== null) {
+                    oracleMatches.push(match[1].trim());
+                }
+
+                //Clean the remaining text to remove the parsed o:"..." tags
+                remainingText = remainingText.replace(oracleRegex, '').replace(/\s+/g, ' ').trim();
+
+                //Build Appwrite query rules for each o: token
+                oracleMatches.forEach(oracleText => {
+                    queries.push(Query.contains('oracle_text', oracleText));
+                });
+
+                //Anything left outside of an o: tag represents part of the card's name
+                if (remainingText.length > 0) {
+                    queries.push(Query.contains('name', remainingText));
+                }
+            } else {
+                //Default fallback if query box is cleared
+                queries.push(Query.orderAsc('name'));
+            }
+
+            queries.push(Query.limit(50000));
+
+            console.log(`📡 Dispatching Syntax Query Tree to Appwrite against: "${searchText}"`);
+
+            const response = await databases.listDocuments(
+                DATABASE_ID,
+                COLLECTION_ID,
+                queries
+            );
+
+            setCards(response.documents);
+            return response.documents;
+
+        } catch (error) {
+            console.error("❌ Syntax engine query rejected by Appwrite:", error.message);
+            setSearchError(error.message);
+            throw error;
+        } finally {
+            setSearchLoading(false);
+        }
+    };
+
+    return (
+        <CardContext.Provider value={{ cards, searchLoading, searchError, queryCardsFromDatabase }}>
+            {children}
+        </CardContext.Provider>
+    );
 };
+
+export const useCards = () => useContext(CardContext);

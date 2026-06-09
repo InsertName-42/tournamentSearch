@@ -1,19 +1,44 @@
-export const applyFilters = (cards, filters, format) => {
-  return cards.filter(card => {
-    //Format Check
-    if (card.legalities[format.toLowerCase()] !== 'legal') return false;
+/**
+ * src/utils/filterLogic.js
+ * Hardened Filtering Engine for Cloud Database Structures
+ */
 
-    //Color Filter
-    if (filters.colors.length > 0) {
-      const hasSelectedColor = card.colors.some(c => filters.colors.includes(c));
-      if (!hasSelectedColor) return false;
-    }
+export const applyFilters = (cardsArray, filters, currentFormat) => {
+    if (!cardsArray || !Array.isArray(cardsArray)) return [];
+    if (!filters) return cardsArray;
 
-    //Type Filter
-    if (filters.type && !card.type_line.includes(filters.type)) {
-      return false;
-    }
+    const { colors = [], type = '' } = filters;
+    const cleanType = type ? type.toLowerCase().trim() : '';
 
-    return true;
-  });
+    return cardsArray.filter(card => {
+        if (!card) return false;
+
+        //Legality Filter
+        if (currentFormat) {
+            const formatKey = `legalities_${currentFormat.toLowerCase()}`;
+            //If the card doesn't have the attribute, or isn't legal, filter it out
+            if (!card[formatKey] || card[formatKey] !== 'legal') {
+                return false;
+            }
+        }
+
+        //Color Identity Filter
+        //Appwrite stores colors as an array of strings (e.g., ["W", "U"]).
+        //Ensure card.colors exists before calling array methods like .some() or .includes()
+        if (colors && colors.length > 0) {
+            const cardColors = Array.isArray(card.colors) ? card.colors : [];
+
+            //EX: Check if card contains at least one of the selected filter colors
+            const colorMatch = colors.some(filterColor => cardColors.includes(filterColor));
+            if (!colorMatch) return false;
+        }
+
+        //Card Type Filter Block
+        if (cleanType) {
+            const cardTypeLine = card.type_line ? card.type_line.toLowerCase() : '';
+            if (!cardTypeLine.includes(cleanType)) return false;
+        }
+
+        return true;
+    });
 };

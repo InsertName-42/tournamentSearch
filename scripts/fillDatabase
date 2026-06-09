@@ -1,0 +1,54 @@
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, ActivityIndicator, StyleSheet } from 'react-native';
+import { seedCardsToAppwrite } from '../src/utils/seedCards';
+
+import rawCardData from '../assets/mtg-cards.json';
+
+export default function AdminSeedScreen() {
+    const [seeding, setSeeding] = useState(false);
+    const [progress, setProgress] = useState(0);
+
+    const handleStartSeeding = async () => {
+        if (!rawCardData || rawCardData.length === 0) {
+            alert("The mtg-cards.json file appears to be empty or missing.");
+            return;
+        }
+        setSeeding(true);
+
+        await seedCardsToAppwrite(rawCardData, (progressPercent) => {
+            setProgress(Math.round(progressPercent * 100));
+        });
+
+        setSeeding(false);
+    };
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.title}>Database Setup Engine</Text>
+            <Text style={styles.subtitle}>
+                Ready to stream {rawCardData.length} minified card documents into your Appwrite Cards collection.
+            </Text>
+
+            {seeding ? (
+                <View style={styles.progressBox}>
+                    <ActivityIndicator size="small" color="#8b5cf6" />
+                    <Text style={styles.progressText}>Uploading batches to cloud: {progress}%</Text>
+                </View>
+            ) : (
+                <TouchableOpacity style={styles.seedBtn} onPress={handleStartSeeding}>
+                    <Text style={styles.btnText}>Start Seeding Cards Collection</Text>
+                </TouchableOpacity>
+            )}
+        </View>
+    );
+}
+
+const styles = StyleSheet.create({
+    container: { flex: 1, backgroundColor: '#121212', justifyContent: 'center', padding: 24 },
+    title: { color: '#fff', fontSize: 22, fontWeight: 'bold', textAlign: 'center' },
+    subtitle: { color: '#aaa', fontSize: 14, textAlign: 'center', marginTop: 8, marginBottom: 32 },
+    seedBtn: { backgroundColor: '#8b5cf6', padding: 16, borderRadius: 8, alignItems: 'center' },
+    btnText: { color: '#fff', fontWeight: 'bold', fontSize: 16 },
+    progressBox: { alignItems: 'center' },
+    progressText: { color: '#fff', marginTop: 12, fontSize: 15, fontWeight: '600' }
+});
