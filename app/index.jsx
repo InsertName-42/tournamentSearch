@@ -44,7 +44,7 @@ export default function Gallery() {
 
     //Initial query automatically when the screen mounts + if the format filter changes
     useEffect(() => {
-        console.log(`🎬 Gallery card fetch triggered for format: ${format}...`);
+        console.log(`Gallery card fetch triggered for format: ${format}...`);
         queryCardsFromDatabase(searchQuery, format).catch(err =>
             console.log("Failed to load database cards on dependency change:", err.message)
         );
@@ -52,11 +52,11 @@ export default function Gallery() {
 
     const displayedCards = useMemo(() => {
         if (!databaseCards || databaseCards.length === 0) {
-            console.log("📊 Pipeline Alert: Database cards array is empty or unpopulated.");
+            console.log("Pipeline Alert: Database cards array is empty or unpopulated.");
             return [];
         }
 
-        console.log(`📊 Processing ${databaseCards.length} raw cards through the tournament pipeline...`);
+        console.log(`Processing ${databaseCards.length} raw cards through the tournament pipeline...`);
         let processedSet = [];
 
         try {
@@ -66,7 +66,7 @@ export default function Gallery() {
                 processedSet = databaseCards;
             }
         } catch (filterError) {
-            console.log("⚠️ Pipeline Warning: applyFilters crashed. Falling back to raw records.", filterError.message);
+            console.log("Pipeline Warning: applyFilters crashed. Falling back to raw records.", filterError.message);
             processedSet = databaseCards;
         }
 
@@ -102,7 +102,7 @@ export default function Gallery() {
                 }
             });
         } catch (sortError) {
-            console.log("⚠️ Pipeline Warning: Sorting logic encountered an error.", sortError.message);
+            console.log("Pipeline Warning: Sorting logic encountered an error.", sortError.message);
             return processedSet;
         }
     }, [databaseCards, metrics, filters, format, sortMode]);
@@ -175,7 +175,7 @@ export default function Gallery() {
                         return (
                             <Pressable
                                 onPress={() => {
-                                    console.log(`📱 Native Route Request Dispatching for: ${item.name}`);
+                                    console.log(`Native Route Request Dispatching for: ${item.name}`);
 
                                     //Escape special characters safely so names like "+2 Mace" pass across mobile routing safely.
                                     const dynamicUrlSegment = encodeURIComponent(item.name);

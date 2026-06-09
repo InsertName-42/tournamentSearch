@@ -1,4 +1,5 @@
 /**
+ * Written by Theo Justman 6/2/26 
  * scripts/patchMissingImages.js
  * Fixes missing card images in the local JSON by re-fetching from Scryfall for any cards that lack an image URI.
  */

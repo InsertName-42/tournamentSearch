@@ -1,4 +1,8 @@
-﻿import React, { useState } from 'react';
+﻿/**
+ * Written by Theo Justman 6/2/26 
+ * Login and authentication screen
+ */
+import React, { useState } from 'react';
 import {
     View,
     Text,

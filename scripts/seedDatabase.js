@@ -1,4 +1,5 @@
 /**
+ * Written by Theo Justman 6/2/26 
  * scripts/seedDatabase.js
  * Headless Server-Side Seeding Tool with Administrative API Key privileges
  */

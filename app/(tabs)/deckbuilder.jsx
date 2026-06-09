@@ -1,4 +1,5 @@
 /**
+ * Written by Theo Justman 6/2/26
  * app/(tabs)/deckbuilder.jsx
  * User Deck Manager & Structured Object Workspace with Dynamic Format Picker
  */

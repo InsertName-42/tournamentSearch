@@ -1,6 +1,8 @@
 /**
+ * Written by Theo Justman 6/2/26 
  * src/utils/seedCards.js
  * Standalone In-Place Image Patch Seeding Script for Node.js
+ * Specifically for images
  * Optimized for rate-limiting safety and security.
  */
 /*

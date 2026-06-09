@@ -1,6 +1,7 @@
 /**
  * src/context/AuthContext.jsx
  * Centralized Authentication Context Provider
+ * Written by Theo Justman 6/2/26 
  */
 import React, { createContext, useState, useEffect, useContext } from 'react';
 import { account } from '../lib/appwrite';

@@ -1,6 +1,7 @@
 /**
  * src/context/CardContext.jsx
  * Advanced Tokenized Search Engine for Datamine
+ * Written by Theo Justman 6/2/26 
  */
 import React, { createContext, useState, useContext } from 'react';
 import { Client, Databases, Query } from 'react-native-appwrite';

@@ -1,4 +1,5 @@
 /**
+ * Written by Theo Justman 6/2/26 
  * src/utils/wipeCollection.js
  * Automated Batch Purge Tool for Appwrite
  */

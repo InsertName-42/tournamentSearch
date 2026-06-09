@@ -1,4 +1,5 @@
 /**
+ * Written by Theo Justman 6/2/26 
  * app/admin/seed.jsx
  * Doesn't really work with the free version of appwrite and is not activly used.
  */

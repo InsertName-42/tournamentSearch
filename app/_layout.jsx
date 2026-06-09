@@ -1,9 +1,10 @@
 /**
+ * Written by Theo Justman 6/2/26 
  * app/_layout.jsx
  * Root layout — updated for Datamine with:
- * 1. react-native-url-polyfill  (must be the very first import)
- * 2. AuthProvider               (wraps everything so all screens can read auth state)
- * 3. Auth-based redirect logic  (sends unauthenticated users to /(auth) safely)
+ * 1. react-native-url-polyfill 
+ * 2. AuthProvider
+ * 3. Auth-based redirect logic
  */
 
 import 'react-native-url-polyfill/auto';
