@@ -2,7 +2,8 @@ App to assist in building decks for the cardgame Magic: the Gathering through us
 Access a list of cards, individual cards with a list of decks, a deck with its list of cards included, or a random deck.
 Log in and make decks that can be saved to your account.  
 V2 resources can be found at this link:   
-https://docs.google.com/presentation/d/1VYCkIJT6Trft4lAol9UxSaUkV19c1N6euWrYtVt8Vrs/edit?usp=sharing
+https://docs.google.com/presentation/d/1VYCkIJT6Trft4lAol9UxSaUkV19c1N6euWrYtVt8Vrs/edit?usp=sharing  
+The environment variables can be found at the end if you want to run the code.
   
 V1 resources are listed here:  
 Project Demo:  
